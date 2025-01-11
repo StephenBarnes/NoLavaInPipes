@@ -47,7 +47,7 @@ table.insert(data.raw.technology.foundry.effects, 1, {type="unlock-recipe", reci
 data.raw["offshore-pump"]["offshore-pump"].surface_conditions = {
 	{
 		property = "pressure",
-		max = 3000,
+		max = 3999,
 	},
 }
 
@@ -55,7 +55,8 @@ data.raw["offshore-pump"]["offshore-pump"].surface_conditions = {
 lavaPumpEntity.surface_conditions = {
 	{
 		property = "pressure",
-		min = 3000,
+		min = 4000,
+		max = 4000,
 	},
 }
 
@@ -64,3 +65,18 @@ data:extend({
 	lavaPumpEntity,
 	lavaPumpRecipe,
 })
+
+-- Block crafting of the wrong offshore pump for a given planet, to avoid confusion.
+data.raw.recipe["offshore-pump"].surface_conditions = {
+	{
+		property = "pressure",
+		max = 3999,
+	},
+}
+data.raw.recipe["lava-pump"].surface_conditions = {
+	{
+		property = "pressure",
+		min = 4000,
+		max = 4000,
+	},
+}

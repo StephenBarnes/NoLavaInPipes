@@ -1,8 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 11. 01. 2024
-  Features:
+  Changes:
     - Allow lava for all assembling machines, for modded recipes using lava.
+    - Block crafting the wrong pump on the wrong planet, to reduce confusion.
+    - Switch to exact pressures for surface conditions.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 04. 12. 2024
