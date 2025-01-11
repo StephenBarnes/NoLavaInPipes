@@ -5,21 +5,7 @@
 -- If a pipe_connection has multiple categories, it allows all of them.
 -- So, foundries need to have connection_category {"default", "lava"}. And then we need to make a new "lava pump" entity that only allows "lava".
 
--- Adjust foundries to allow lava connections.
-local foundry = data.raw["assembling-machine"].foundry
-for _, fluidBox in pairs(foundry.fluid_boxes) do
-	if fluidBox.production_type == "input" then
-		for _, pipeConnection in pairs(fluidBox.pipe_connections) do
-			if pipeConnection.connection_category == nil then
-				pipeConnection.connection_category = {"default", "lava"}
-			elseif type(pipeConnection.connection_category) == "string" then
-				pipeConnection.connection_category = {pipeConnection.connection_category, "lava"}
-			else
-				table.insert(pipeConnection.connection_category, "lava")
-			end
-		end
-	end
-end
+-- Code to add lava category to assembling-machines's fluid boxes are in data-updates, not data, so that mods can add new assembling-machines or fluidboxes in data.
 
 -- Create new lava pump item.
 local lavaPumpItem = table.deepcopy(data.raw.item["offshore-pump"])
@@ -62,6 +48,14 @@ data.raw["offshore-pump"]["offshore-pump"].surface_conditions = {
 	{
 		property = "pressure",
 		max = 3000,
+	},
+}
+
+-- Also block placement of lava pumps anywhere but Vulcanus, so that people don't try to use them as water pumps on eg Nauvis and then they won't connect to pipes.
+lavaPumpEntity.surface_conditions = {
+	{
+		property = "pressure",
+		min = 3000,
 	},
 }
 
