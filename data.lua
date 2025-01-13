@@ -7,12 +7,13 @@
 
 -- Code to add lava category to assembling-machines's fluid boxes are in data-updates, not data, so that mods can add new assembling-machines or fluidboxes in data.
 
--- Create new lava pump item.
-local lavaPumpItem = table.deepcopy(data.raw.item["offshore-pump"])
-lavaPumpItem.order = lavaPumpItem.order .. "-lava"
-lavaPumpItem.name = "lava-pump"
-lavaPumpItem.place_result = "lava-pump"
-lavaPumpItem.icons = {
+-- Create new lava pump entity.
+-- Offshore pumps placed on Nauvis will be automatically converted into lava pumps.
+local lavaPumpEntity = table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
+lavaPumpEntity.name = "lava-pump"
+lavaPumpEntity.fluid_box.pipe_connections[1].connection_category = "lava"
+lavaPumpEntity.placeable_by = {item = "offshore-pump", count = 1}
+lavaPumpEntity.icons = {
 	{
 		icon = "__base__/graphics/icons/offshore-pump.png",
 	},
@@ -22,61 +23,4 @@ lavaPumpItem.icons = {
 		shift = {7, -5},
 	},
 }
-
--- Create new lava pump entity.
-local lavaPumpEntity = table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
-lavaPumpEntity.name = "lava-pump"
-lavaPumpEntity.minable.result = "lava-pump"
-lavaPumpEntity.fluid_box.pipe_connections[1].connection_category = "lava"
-
--- Create recipe for lava pump.
--- For offshore pump, recipe is 2 iron gear wheel + 3 pipe.
--- When starting on Vulcanus, you have stone, and iron+copper+tungsten ores, and carbon. Also after mining 1 rock you can make tungsten carbide.
--- So, make the recipe 2 iron gear wheel + 3 pipe + some tungsten carbide.
-local lavaPumpRecipe = table.deepcopy(data.raw["recipe"]["offshore-pump"])
-lavaPumpRecipe.name = "lava-pump"
-table.insert(lavaPumpRecipe.ingredients, {type="item", name="tungsten-carbide", amount=5})
-lavaPumpRecipe.results = { {type="item", name="lava-pump", amount=1} }
-lavaPumpRecipe.main_product = "lava-pump"
-
--- Add lava pump recipe to tech.
-table.insert(data.raw.technology.foundry.effects, 1, {type="unlock-recipe", recipe="lava-pump"})
-
--- Block placement of normal pumps on Vulcanus.
--- Could do this with a new collision layer for lava, but it's easier to just block building them on Vulcanus.
-data.raw["offshore-pump"]["offshore-pump"].surface_conditions = {
-	{
-		property = "pressure",
-		max = 3999,
-	},
-}
-
--- Also block placement of lava pumps anywhere but Vulcanus, so that people don't try to use them as water pumps on eg Nauvis and then they won't connect to pipes.
-lavaPumpEntity.surface_conditions = {
-	{
-		property = "pressure",
-		min = 4000,
-		max = 4000,
-	},
-}
-
-data:extend({
-	lavaPumpItem,
-	lavaPumpEntity,
-	lavaPumpRecipe,
-})
-
--- Block crafting of the wrong offshore pump for a given planet, to avoid confusion.
-data.raw.recipe["offshore-pump"].surface_conditions = {
-	{
-		property = "pressure",
-		max = 3999,
-	},
-}
-data.raw.recipe["lava-pump"].surface_conditions = {
-	{
-		property = "pressure",
-		min = 4000,
-		max = 4000,
-	},
-}
+data:extend({lavaPumpEntity})
