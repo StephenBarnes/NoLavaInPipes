@@ -3,19 +3,19 @@ local function replaceWithLavaPump(entity)
 	-- Replace this offshore pump with a "lava-pump" entity.
 	if entity == nil or not entity.valid then return end
 	if entity.name ~= "offshore-pump" or entity.type ~= "offshore-pump" then return end
-    local surface = entity.surface
-    local info = {
-        name = "lava-pump",
-        position = entity.position,
-        quality = entity.quality,
-        force = entity.force,
-        fast_replace = true,
-        player = entity.last_user,
+	local surface = entity.surface
+	local info = {
+		name = "lava-pump",
+		position = entity.position,
+		quality = entity.quality,
+		force = entity.force,
+		fast_replace = true,
+		player = entity.last_user,
 		orientation = entity.orientation,
 		direction = entity.direction,
-    }
-    entity.destroy()
-    surface.create_entity(info)
+	}
+	entity.destroy()
+	surface.create_entity(info)
 end
 
 -- When a game is loaded, replace all pumps on Vulcanus with lava-pumps.
@@ -23,7 +23,7 @@ local function initialScan()
 	if game.surfaces["vulcanus"] == nil then
 		return
 	end
-    for _, offshorePump in pairs(game.surfaces["vulcanus"].find_entities_filtered{name="offshore-pump"}) do
+	for _, offshorePump in pairs(game.surfaces["vulcanus"].find_entities_filtered{name="offshore-pump"}) do
 		replaceWithLavaPump(offshorePump)
 	end
 end

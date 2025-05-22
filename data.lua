@@ -23,4 +23,6 @@ lavaPumpEntity.icons = {
 		shift = {7, -5},
 	},
 }
+lavaPumpEntity.hidden_in_factoriopedia = true
+lavaPumpEntity.factoriopedia_alternative = "offshore-pump"
 data:extend({lavaPumpEntity})
